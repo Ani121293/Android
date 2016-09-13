@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">VideoProject</string>
+
+    <string name="button_more_info">See more...</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_show_details">Show_details</string>
+    <string name="detailed_info">Here will be detailed info</string>
+    <string name="app_title">VideoPage)))</string>
+
+</resources>
