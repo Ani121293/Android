@@ -1,50 +1,99 @@
 package com.example.disney.myapplication;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.fragments.DetailsFragment;
 import com.example.test.video_proj_example.R;
 
 import java.util.ArrayList;
 
-public class VideoAdapter extends ArrayAdapter<Video> implements Filterable {
+public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> implements Filterable {
 
     private ArrayList<Video> videos;
     private final Context context;
     private final FragmentManager manager;
     private VideoFilter filter;
 
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row, viewGroup, false);
+        return new ViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        Video currentVideo = videos.get(position);
+        holder.setmNumber(String.valueOf(currentVideo.getmNumber()));
+        holder.setmVideoName(currentVideo.getmVideoName());
+        holder.row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new DetailsFragment(videos.get(position));
+                manager.beginTransaction().addToBackStack("details").replace(R.id.fragment_container, fragment).commit();
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return null != videos ? videos.size() : 0;
+    }
+
     public VideoAdapter(Activity context, int resource, ArrayList<Video> videos, FragmentManager manager) {
-        super(context, resource, videos);
         this.videos = videos;
         this.context = context;
         this.manager = manager;
     }
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.row, parent, false);
+    protected class ViewHolder extends RecyclerView.ViewHolder {
+        private View row;
+        private TextView mNumber;
+        private TextView mVideoName;
+        private ImageView mShowDetails;
+
+        public ViewHolder(View row) {
+            super(row);
+            this.row = row;
+            mNumber = (TextView) row.findViewById(R.id.video_number);
+            mVideoName = (TextView) row.findViewById(R.id.video_name);
+            mShowDetails = (ImageView) row.findViewById(R.id.show_details);
         }
-        TextView videoName = (TextView) convertView.findViewById(R.id.video_name);
-        videoName.setText(videos.get(position).getmVideoName());
 
-        TextView videoNumber = (TextView) convertView.findViewById(R.id.video_number);
-        videoNumber.setText(String.valueOf(videos.get(position).getmNumber()));
-        return convertView;
-    }
+        public TextView getmNumber() {
+            return mNumber;
+        }
 
-    @Override
-    public int getCount() {
-        return videos != null? videos.size() : 0;
+        public void setmNumber(String number) {
+            this.mNumber.setText(number);
+        }
+
+        public TextView getmVideoName() {
+            return mVideoName;
+        }
+
+        public void setmVideoName(String videoName) {
+            this.mVideoName.setText(videoName);
+        }
+
+        public ImageView getmShowDetails() {
+            return mShowDetails;
+        }
+
+        public void setmShowDetails(ImageView mShowDetails) {
+            this.mShowDetails = mShowDetails;
+        }
     }
 
     @Override
@@ -79,9 +128,7 @@ public class VideoAdapter extends ArrayAdapter<Video> implements Filterable {
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            if (0 == results.count) {
-                notifyDataSetInvalidated();
-            } else {
+            if (0 != results.count) {
                 videos = (ArrayList<Video>) results.values;
                 notifyDataSetChanged();
             }

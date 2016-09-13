@@ -32,9 +32,6 @@ public class DetailsFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d("myLog", "-----> DetailsFragment ");
-
-
     }
 
     @Override
@@ -42,9 +39,8 @@ public class DetailsFragment extends Fragment{
                              Bundle savedInstanceState) {
         ((VideoActivity) getActivity()).getSupportActionBar().setTitle("Details");
         ((VideoActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        ((VideoActivity) getActivity()).getSupportActionBar().setTitle("Details");
+        ((VideoActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
-        setHasOptionsMenu(true);
 
         view = inflater.inflate(R.layout.details_fragment, container, false);
 
@@ -71,6 +67,7 @@ public class DetailsFragment extends Fragment{
     switch (item.getItemId()) {
         case android.R.id.home:
                 getActivity().onBackPressed();
+            return true;
         default:
             return super.onOptionsItemSelected(item);
     }

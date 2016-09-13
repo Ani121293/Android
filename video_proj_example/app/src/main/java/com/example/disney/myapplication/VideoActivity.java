@@ -8,8 +8,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,24 +29,19 @@ public class VideoActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
-
-//        fragmentManager = getSupportFragmentManager();
-
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         fragment = new ListFragment();
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-
-        System.out.println(" --------- on create --------- ");
-
     }
-
 
 
     @Override
@@ -87,6 +86,7 @@ public class VideoActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -96,36 +96,6 @@ public class VideoActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    //    @Override
-//    public void onBackStackChanged() {
-//        shouldDisplayHomeUp();
-//    }
-//
-//    public void shouldDisplayHomeUp(){
-//        //Enable Up button only  if there are entries in the back stack
-//        boolean canback = getSupportFragmentManager().getBackStackEntryCount() > 1 ;
-//        actionBar.setDisplayHomeAsUpEnabled(canback);
-//    }
-//
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        fragmentManager.popBackStack();
-//        return true;
-//    }
-
-//        @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                onBackPressed();
-////                onSupportNavigateUp();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
 
 }
 

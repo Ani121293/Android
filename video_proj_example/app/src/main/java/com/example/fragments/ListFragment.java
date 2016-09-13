@@ -2,33 +2,29 @@ package com.example.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
 
-import com.example.disney.myapplication.VideoActivity;
-import com.example.test.video_proj_example.R;
 import com.example.disney.myapplication.Video;
+import com.example.disney.myapplication.VideoActivity;
 import com.example.disney.myapplication.VideoAdapter;
+import com.example.test.video_proj_example.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by disney on 9/6/16.
- */
 public class ListFragment extends Fragment {
 
     public static ArrayList<Video> videoList;
     private View view;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+    private GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+
 
     public VideoAdapter getAdapter() {
         return adapter;
@@ -38,33 +34,12 @@ public class ListFragment extends Fragment {
         this.adapter = adapter;
     }
 
-    private  VideoAdapter adapter = null;
-
-    public Button getSeeMoreBtn() {
-        return seeMoreBtn;
-    }
-
-    public void setSeeMoreBtn(Button seeMoreBtn) {
-        this.seeMoreBtn = seeMoreBtn;
-    }
-
-    private Button seeMoreBtn;
-    private ListView listView;
-
-    public ListView getListView() {
-        return listView;
-    }
-
-    public void setListView(ListView listView) {
-        this.listView = listView;
-    }
+    private VideoAdapter adapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d("myLog", "-----> ListFragment ");
-
     }
 
     @Override
@@ -75,8 +50,6 @@ public class ListFragment extends Fragment {
         ((VideoActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
         ((VideoActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-
-        view = inflater.inflate(R.layout.list_fragment, container, false);
         videoList = new ArrayList<>();
         for (int i = 0; i < 10; ++i) {
             videoList.add(new Video("Video", i, "Here will be the decription of video", R.mipmap.ic_video_image));
@@ -86,49 +59,28 @@ public class ListFragment extends Fragment {
             videoList.add(new Video("Prestige", j, "Here will be the decription of video", R.mipmap.ic_video_image));
         }
 
-        listView = (ListView) view.findViewById(R.id.listview);
-
-        seeMoreBtn = new Button(getActivity());
-        seeMoreBtn.setText(R.string.button_more_info);
-        seeMoreBtn.setTextSize(20);
-        seeMoreBtn.setGravity(Gravity.CENTER_HORIZONTAL);
-        listView.addFooterView(seeMoreBtn);
+        view = inflater.inflate(R.layout.list_fragment, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        adapter = new VideoAdapter(this.getActivity(), R.layout.list_fragment, videoList, getFragmentManager());
 
 
-        onClickEachItem();
-        onClickButton();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(linearLayoutManager);
         return view;
     }
 
-    private void onClickButton() {
-        seeMoreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new DetailsFragment(videoList.get(1));
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
-                        .addToBackStack("Details").commit();
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.changeView:
+                if (recyclerView.getLayoutManager().equals(linearLayoutManager)) {
+                    recyclerView.setLayoutManager(gridLayoutManager);
+                } else {
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
-
-    private void onClickEachItem() {
-        adapter = new VideoAdapter(this.getActivity(),R.layout.list_fragment, videoList, getFragmentManager());
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment = new DetailsFragment(videoList.get(position));
-                getFragmentManager().beginTransaction().addToBackStack("details").replace(R.id.fragment_container, fragment).commit();
-
-            }
-        });
-
-    }
-
-
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        menu.findItem(android.R.id.home).setVisible(false).setEnabled(false);
-//    }
 }
+
