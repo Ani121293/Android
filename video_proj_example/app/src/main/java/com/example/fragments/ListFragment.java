@@ -23,8 +23,7 @@ public class ListFragment extends Fragment {
     private View view;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-    private GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-
+    private static boolean isLinear = true;
 
     public VideoAdapter getAdapter() {
         return adapter;
@@ -45,39 +44,46 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         ((VideoActivity) getActivity()).getSupportActionBar().setTitle("List");
         ((VideoActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
         ((VideoActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
         videoList = new ArrayList<>();
         for (int i = 0; i < 10; ++i) {
             videoList.add(new Video("Video", i, "Here will be the decription of video", R.mipmap.ic_video_image));
         }
-
         for (int j = 10; j < 17; ++j) {
             videoList.add(new Video("Prestige", j, "Here will be the decription of video", R.mipmap.ic_video_image));
         }
-
         view = inflater.inflate(R.layout.list_fragment, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         adapter = new VideoAdapter(this.getActivity(), R.layout.list_fragment, videoList, getFragmentManager());
-
-
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
         return view;
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (isLinear) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.changeView:
-                if (recyclerView.getLayoutManager().equals(linearLayoutManager)) {
-                    recyclerView.setLayoutManager(gridLayoutManager);
+                if (recyclerView.getLayoutManager().getClass().equals(linearLayoutManager.getClass())) {
+                    isLinear = false;
+                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                 } else {
-                    recyclerView.setLayoutManager(linearLayoutManager);
+                    isLinear = true;
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
