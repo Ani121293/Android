@@ -20,7 +20,7 @@ import com.example.disney.myapplication.Video;
 /**
  * Created by disney on 9/6/16.
  */
-public class DetailsFragment extends Fragment{
+public class DetailsFragment extends Fragment {
     private Video video;
     private View view;
 
@@ -49,7 +49,9 @@ public class DetailsFragment extends Fragment{
         videoName.setText(video.getmVideoName());
 
         ImageView videoImage = (ImageView) view.findViewById(R.id.video_image);
-        videoImage.setImageResource(video.getmImageId());
+        if (video.getmImage() != null) {
+            videoImage.setImageResource(video.getmImageId());
+        }
         TextView describtionTextView = (TextView) view.findViewById(R.id.detailed_info);
         describtionTextView.setText(video.getmDescription());
 
@@ -64,12 +66,12 @@ public class DetailsFragment extends Fragment{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-        case android.R.id.home:
+        switch (item.getItemId()) {
+            case android.R.id.home:
                 getActivity().onBackPressed();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-    }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

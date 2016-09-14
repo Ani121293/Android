@@ -1,7 +1,9 @@
 package com.example.disney.myapplication;
 
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.fragments.DetailsFragment;
 import com.example.fragments.ListFragment;
 import com.example.test.video_proj_example.R;
 
@@ -21,7 +24,16 @@ public class VideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
         fragment = new ListFragment();
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        DetailsFragment detailsFragment = new DetailsFragment(new Video("", 0 ,"", 0));
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            fragmentTransaction.add(R.id.list_container, fragment);
+            fragmentTransaction.add(R.id.details_container, detailsFragment);
+        } else {
+            fragmentTransaction.add(R.id.fragment_container, fragment);
+        }
+        fragmentTransaction.commit();
     }
 
     @Override

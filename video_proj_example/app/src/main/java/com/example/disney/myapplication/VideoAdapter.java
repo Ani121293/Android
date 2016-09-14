@@ -3,7 +3,10 @@ package com.example.disney.myapplication;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.ListFragment;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +43,16 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         holder.row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new DetailsFragment(videos.get(position));
-                manager.beginTransaction().addToBackStack("details").replace(R.id.fragment_container, fragment).commit();
+                Fragment detailsFragment = new DetailsFragment(videos.get(position));
+                Fragment listFragment = new ListFragment();
+                FragmentTransaction fragmentTransaction = manager.beginTransaction();
+                if (Configuration.ORIENTATION_LANDSCAPE == context.getResources().getConfiguration().orientation) {
+                    fragmentTransaction.add(R.id.list_container, listFragment);
+                    fragmentTransaction.add(R.id.details_container, detailsFragment);
+                } else {
+                    fragmentTransaction.replace(R.id.fragment_container, detailsFragment);
+                }
+                fragmentTransaction.commit();
             }
         });
     }

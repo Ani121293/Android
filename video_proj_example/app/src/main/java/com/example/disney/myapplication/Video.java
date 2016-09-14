@@ -16,6 +16,12 @@ public class Video {
         mNumber = number;
         mDescription = description;
     }
+    public Video(){
+        mImageId = 0;
+        mVideoName = "";
+        mNumber = 0;
+        mDescription = "";
+    }
 
     public Integer getmImageId() {
         return mImageId;

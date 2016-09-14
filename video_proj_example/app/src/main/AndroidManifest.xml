@@ -14,7 +14,6 @@
         android:theme="@style/Theme.AppCompat">
         <activity
             android:name="com.example.disney.myapplication.VideoActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
