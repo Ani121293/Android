@@ -47,10 +47,9 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 Fragment listFragment = new ListFragment();
                 FragmentTransaction fragmentTransaction = manager.beginTransaction();
                 if (Configuration.ORIENTATION_LANDSCAPE == context.getResources().getConfiguration().orientation) {
-                    fragmentTransaction.add(R.id.list_container, listFragment);
-                    fragmentTransaction.add(R.id.details_container, detailsFragment);
+                    fragmentTransaction.addToBackStack("details").replace(R.id.details_container, detailsFragment);
                 } else {
-                    fragmentTransaction.replace(R.id.fragment_container, detailsFragment);
+                    fragmentTransaction.addToBackStack("details").replace(R.id.fragment_container, detailsFragment);
                 }
                 fragmentTransaction.commit();
             }

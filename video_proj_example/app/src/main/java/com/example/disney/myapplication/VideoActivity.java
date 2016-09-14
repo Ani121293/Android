@@ -24,8 +24,7 @@ public class VideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
         fragment = new ListFragment();
-        DetailsFragment detailsFragment = new DetailsFragment(new Video("", 0 ,"", 0));
-
+        DetailsFragment detailsFragment = new DetailsFragment(new Video("", 0, "", 0));
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             fragmentTransaction.add(R.id.list_container, fragment);
@@ -45,14 +44,10 @@ public class VideoActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_video, menu);
-
         SearchManager searchManager = (SearchManager)
                 getSystemService(Context.SEARCH_SERVICE);
-
         MenuItem searchItem = menu.findItem(R.id.action_search);
-
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
         searchView.setSearchableInfo(searchManager.
                 getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search your lovely video");
@@ -77,9 +72,6 @@ public class VideoActivity extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
-
-    //manifest-> <application ->    android:configChanges="orientation|screenSize"
-
 
 }
 
