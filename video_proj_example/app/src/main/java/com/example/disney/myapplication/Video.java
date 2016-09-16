@@ -2,9 +2,10 @@ package com.example.disney.myapplication;
 
 import android.media.Image;
 
+import java.io.Serializable;
 import java.sql.Blob;
 
-public class Video {
+public class Video implements Serializable{
     private String mVideoName;
     private Integer mNumber;
     private String  mDescription;

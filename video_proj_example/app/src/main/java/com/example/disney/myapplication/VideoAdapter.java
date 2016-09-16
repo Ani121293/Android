@@ -1,12 +1,12 @@
 package com.example.disney.myapplication;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fragments.DetailsFragment;
+import com.example.fragments.ListFragment;
 import com.example.test.video_proj_example.R;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
     private final Context context;
     private final FragmentManager manager;
     private VideoFilter filter;
+    static final String key = "lastSinglePaneFragment";
+    static final String DETAILS_FRAGMENT = "details fragment";
 
 
     @Override
@@ -47,13 +50,21 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 Fragment listFragment = new ListFragment();
                 FragmentTransaction fragmentTransaction = manager.beginTransaction();
                 if (Configuration.ORIENTATION_LANDSCAPE == context.getResources().getConfiguration().orientation) {
-                    fragmentTransaction.addToBackStack("details").replace(R.id.details_container, detailsFragment);
+                    fragmentTransaction.addToBackStack("details").replace(R.id.details_container,
+                            detailsFragment, DETAILS_FRAGMENT);
                 } else {
-                    fragmentTransaction.addToBackStack("details").replace(R.id.fragment_container, detailsFragment);
+                    fragmentTransaction.addToBackStack("details").replace(R.id.fragment_container,
+                            detailsFragment, DETAILS_FRAGMENT);
                 }
                 fragmentTransaction.commit();
+                saveFragment(DETAILS_FRAGMENT);
             }
         });
+    }
+
+    private void saveFragment(String fragName) {
+        context.getSharedPreferences(VideoActivity.PREFERENCE, this.context.MODE_PRIVATE).edit()
+                .putBoolean(key,true).commit();
     }
 
     @Override

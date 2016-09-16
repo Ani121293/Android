@@ -1,7 +1,9 @@
 package com.example.fragments;
 
-import android.app.Fragment;
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +19,11 @@ import com.example.test.video_proj_example.R;
 public class DetailsFragment extends Fragment {
     private Video video;
 
+    public DetailsFragment()
+    {
+        System.out.println("video = " + video);
+    }
+
     public DetailsFragment(Video video) {
         this.video = video;
     }
@@ -25,6 +32,9 @@ public class DetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        if (savedInstanceState != null) {
+            video = (Video) savedInstanceState.getSerializable("currentVideo");
+        }
     }
 
     @Override
@@ -57,5 +67,11 @@ public class DetailsFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+        @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        System.out.println("---> save from Details");
+        outState.putSerializable("currentVideo",video);
     }
 }
