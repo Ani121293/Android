@@ -3,7 +3,6 @@ package com.example.disney.myapplication;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,30 +18,29 @@ import com.example.test.video_proj_example.R;
 
 
 public class VideoActivity extends AppCompatActivity {
-    ListFragment fragment;
 
-    static String mLastSinglePaneFragment = "";
     static final String LIST_FRAGMENT = "list fragment";
     static final String DETAILS_FRAGMENT = "details fragment";
     static final String key = "lastSinglePaneFragment";
     public static final String PREFERENCE = "com.example.disney.myapplication.VideoActivity.PREFERENCE";
+    boolean isDetailsOPened = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
-        boolean isDetailsOPened = getSharedPreferences(PREFERENCE, MODE_PRIVATE).getBoolean(key, false);
         boolean mDualPane = findViewById(R.id.dual_pane) != null;
         if (savedInstanceState != null) {
-            mLastSinglePaneFragment = getFragment();
+            isDetailsOPened = isDetailsOpened();
         }
         FragmentManager fm = getSupportFragmentManager();
         if (!mDualPane && fm.findFragmentById(R.id.fragment_container) == null) {
-            ListFragment singleListFragment = getDetatchedMasterFragment(false);
-            fm.beginTransaction().add(R.id.fragment_container, singleListFragment, LIST_FRAGMENT).commit();
-            if (mLastSinglePaneFragment.equals(DETAILS_FRAGMENT)) {
+            if (isDetailsOPened) {
                 openSinglePaneDetailFragment();
+            } else {
+                ListFragment singleListFragment = getDetatchedMasterFragment(false);
+                fm.beginTransaction().add(R.id.fragment_container, singleListFragment, LIST_FRAGMENT).commit();
             }
         }
         if (mDualPane && fm.findFragmentById(R.id.list_container) == null) {
@@ -55,23 +53,9 @@ public class VideoActivity extends AppCompatActivity {
         }
     }
 
-//    private void saveFragment(String fragName) {
-//        SharedPreferences currentFrag = getPreferences(MODE_PRIVATE);
-//        SharedPreferences.Editor ed = currentFrag.edit();
-//        ed.putString(key, fragName);
-//        ed.commit();
-//    }
-
-    public String getFragment() {
-        return getPreferences(MODE_PRIVATE).getString(key, "");  //TODO with true mechanism
+    public boolean isDetailsOpened() {
+        return getSharedPreferences(PREFERENCE, MODE_PRIVATE).getBoolean(key, false);
     }
-
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        System.out.println("-----> save");
-//        outState.putString("lastSinglePaneFragment", LIST_FRAGMENT);
-//    }
 
 
     private ListFragment getDetatchedMasterFragment(boolean popBackStack) {
@@ -129,7 +113,8 @@ public class VideoActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
 // Reload listView corresponding to filtering of query
-                VideoAdapter listAdapter = fragment.getAdapter();
+                VideoAdapter listAdapter = ((ListFragment) getSupportFragmentManager().
+                        findFragmentByTag(LIST_FRAGMENT)).getAdapter();
                 listAdapter.getFilter().filter(query);
                 searchView.clearFocus();
                 return true;

@@ -57,12 +57,12 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                             detailsFragment, DETAILS_FRAGMENT);
                 }
                 fragmentTransaction.commit();
-                saveFragment(DETAILS_FRAGMENT);
+                saveFragment();
             }
         });
     }
 
-    private void saveFragment(String fragName) {
+    private void saveFragment() {
         context.getSharedPreferences(VideoActivity.PREFERENCE, this.context.MODE_PRIVATE).edit()
                 .putBoolean(key,true).commit();
     }

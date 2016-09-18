@@ -1,7 +1,6 @@
 package com.example.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,11 +18,10 @@ import com.example.test.video_proj_example.R;
 public class DetailsFragment extends Fragment {
     private Video video;
 
-    public DetailsFragment()
-    {
-        System.out.println("video = " + video);
+    public DetailsFragment() {
     }
 
+    @SuppressLint("ValidFragment")
     public DetailsFragment(Video video) {
         this.video = video;
     }
@@ -68,10 +66,10 @@ public class DetailsFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-        @Override
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        System.out.println("---> save from Details");
-        outState.putSerializable("currentVideo",video);
+        outState.putSerializable("currentVideo", video);
     }
 }
