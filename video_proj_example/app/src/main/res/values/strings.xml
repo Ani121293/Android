@@ -6,5 +6,7 @@
     <string name="title_activity_show_details">Show_details</string>
     <string name="detailed_info">Here will be detailed info</string>
     <string name="app_title">VideoPage)))</string>
+    <string name="desc">video description</string>
+    <string name="name">video name</string>
 
 </resources>

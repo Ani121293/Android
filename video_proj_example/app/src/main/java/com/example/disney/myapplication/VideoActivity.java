@@ -40,16 +40,16 @@ public class VideoActivity extends AppCompatActivity {
                 openSinglePaneDetailFragment();
             } else {
                 ListFragment singleListFragment = getDetatchedMasterFragment(false);
-                fm.beginTransaction().add(R.id.fragment_container, singleListFragment, LIST_FRAGMENT).commit();
+                fm.beginTransaction().add(R.id.fragment_container, singleListFragment, LIST_FRAGMENT).addToBackStack(LIST_FRAGMENT).commit();
             }
         }
         if (mDualPane && fm.findFragmentById(R.id.list_container) == null) {
             ListFragment listFragment = getDetatchedMasterFragment(true);
-            fm.beginTransaction().add(R.id.list_container, listFragment, LIST_FRAGMENT).commit();
+            fm.beginTransaction().add(R.id.list_container, listFragment, LIST_FRAGMENT).addToBackStack(LIST_FRAGMENT).commit();
         }
         if (mDualPane && fm.findFragmentById(R.id.details_container) == null) {
             DetailsFragment detailFragment = getDetatchedDetailFragment();
-            fm.beginTransaction().add(R.id.details_container, detailFragment, DETAILS_FRAGMENT).commit();
+            fm.beginTransaction().add(R.id.details_container, detailFragment, DETAILS_FRAGMENT).addToBackStack(DETAILS_FRAGMENT).commit();
         }
     }
 

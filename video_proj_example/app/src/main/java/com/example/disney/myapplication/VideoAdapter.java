@@ -2,7 +2,6 @@ package com.example.disney.myapplication;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -50,21 +49,22 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 Fragment listFragment = new ListFragment();
                 FragmentTransaction fragmentTransaction = manager.beginTransaction();
                 if (Configuration.ORIENTATION_LANDSCAPE == context.getResources().getConfiguration().orientation) {
-                    fragmentTransaction.addToBackStack("details").replace(R.id.details_container,
+                    fragmentTransaction.addToBackStack(DETAILS_FRAGMENT).replace(R.id.details_container,
                             detailsFragment, DETAILS_FRAGMENT);
                 } else {
-                    fragmentTransaction.addToBackStack("details").replace(R.id.fragment_container,
+                    fragmentTransaction.addToBackStack(DETAILS_FRAGMENT).replace(R.id.fragment_container,
                             detailsFragment, DETAILS_FRAGMENT);
                 }
                 fragmentTransaction.commit();
                 saveFragment();
             }
         });
+
     }
 
     private void saveFragment() {
         context.getSharedPreferences(VideoActivity.PREFERENCE, this.context.MODE_PRIVATE).edit()
-                .putBoolean(key,true).commit();
+                .putBoolean(key, true).commit();
     }
 
     @Override
@@ -76,6 +76,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         this.videos = videos;
         this.context = context;
         this.manager = manager;
+    }
+
+    public void reloadVideo(ArrayList<Video> newVideoList) {
+        this.videos = newVideoList;
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
