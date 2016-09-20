@@ -97,7 +97,7 @@ public class ListFragment extends Fragment {
                         videoList.add(new Video(name, videoList.size(), description, R.mipmap.ic_video_image));
                         adapter.notifyItemInserted(videoList.size());
                         adapter.notifyDataSetChanged();
-                        adapter.reloadVideo(videoList);
+//                        adapter.reloadVideo(videoList);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -127,7 +127,7 @@ public class ListFragment extends Fragment {
                 videoList.remove(position);
                 adapter.notifyItemRemoved(position);
                 adapter.notifyDataSetChanged();
-                adapter.reloadVideo(videoList);
+//                adapter.reloadVideo(videoList);
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);

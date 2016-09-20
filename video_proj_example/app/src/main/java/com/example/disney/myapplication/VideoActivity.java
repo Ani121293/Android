@@ -127,6 +127,12 @@ public class VideoActivity extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+    }
 }
 
 
