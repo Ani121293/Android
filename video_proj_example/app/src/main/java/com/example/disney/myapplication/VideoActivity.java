@@ -132,8 +132,13 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            ListFragment singleListFragment = getDetatchedMasterFragment(true);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, singleListFragment, LIST_FRAGMENT).addToBackStack(LIST_FRAGMENT).commit();
+            if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+                finish();
+            } else {
+                ListFragment singleListFragment = getDetatchedMasterFragment(true);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, singleListFragment, LIST_FRAGMENT).addToBackStack(LIST_FRAGMENT).commit();
+
+            }
         } else {
             super.onBackPressed();
         }
