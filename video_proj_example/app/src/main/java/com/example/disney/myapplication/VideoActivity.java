@@ -3,6 +3,7 @@ package com.example.disney.myapplication;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -130,8 +131,12 @@ public class VideoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        super.onBackPressed();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ListFragment singleListFragment = getDetatchedMasterFragment(true);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, singleListFragment, LIST_FRAGMENT).addToBackStack(LIST_FRAGMENT).commit();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
 

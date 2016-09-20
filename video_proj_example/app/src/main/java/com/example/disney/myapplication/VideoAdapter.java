@@ -78,10 +78,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         this.manager = manager;
     }
 
-    public void reloadVideo(ArrayList<Video> newVideoList) {
-        this.videos = newVideoList;
-    }
-
     protected class ViewHolder extends RecyclerView.ViewHolder {
         private View row;
         private TextView mNumber;

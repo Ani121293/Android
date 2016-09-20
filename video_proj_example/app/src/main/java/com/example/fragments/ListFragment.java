@@ -1,6 +1,12 @@
 package com.example.fragments;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -33,6 +39,7 @@ public class ListFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     private static boolean isLinear = true;
     private final String key = "currentVideoList";
+    private Paint p = new Paint();
 
     public VideoAdapter getAdapter() {
         return adapter;
@@ -97,7 +104,6 @@ public class ListFragment extends Fragment {
                         videoList.add(new Video(name, videoList.size(), description, R.mipmap.ic_video_image));
                         adapter.notifyItemInserted(videoList.size());
                         adapter.notifyDataSetChanged();
-//                        adapter.reloadVideo(videoList);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -122,12 +128,46 @@ public class ListFragment extends Fragment {
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                videoList.remove(position);
-                adapter.notifyItemRemoved(position);
-                adapter.notifyDataSetChanged();
-//                adapter.reloadVideo(videoList);
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle("Confirmation");
+                alert.setMessage("Are you sure you want to DELETE this record ?");
+                alert.setIcon(android.R.drawable.ic_dialog_email);
+                alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int position = viewHolder.getAdapterPosition();
+                        videoList.remove(position);
+                        adapter.notifyItemRemoved(position);
+                        adapter.notifyDataSetChanged();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                alert.show();
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                Bitmap icon;
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    View itemView = viewHolder.itemView;
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+                    p.setColor(Color.RED);
+                    RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),
+                            (float) itemView.getRight(), (float) itemView.getBottom());
+                    c.drawRect(background, p);
+                    icon = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_menu_delete);
+                    RectF icon_dest = new RectF((float) itemView.getRight() - 2 * width, (float) itemView.getTop() +
+                            width, (float) itemView.getRight() - width, (float) itemView.getBottom() - width);
+                    c.drawBitmap(icon, null, icon_dest, p);
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
