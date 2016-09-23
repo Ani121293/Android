@@ -3,6 +3,7 @@ package com.example.disney.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -49,11 +50,14 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 Fragment listFragment = new ListFragment();
                 FragmentTransaction fragmentTransaction = manager.beginTransaction();
                 if (Configuration.ORIENTATION_LANDSCAPE == context.getResources().getConfiguration().orientation) {
+                    System.out.println("---------LANDSCAPE DETAIL ADAPTER " + manager.getBackStackEntryCount());
                     fragmentTransaction.addToBackStack(DETAILS_FRAGMENT).replace(R.id.details_container,
                             detailsFragment, DETAILS_FRAGMENT);
                 } else {
+                    System.out.println("---------PORTRAIT DETAIL ADAPTER " + manager.getBackStackEntryCount());
                     fragmentTransaction.addToBackStack(DETAILS_FRAGMENT).replace(R.id.fragment_container,
                             detailsFragment, DETAILS_FRAGMENT);
+                    ((FloatingActionButton) ((VideoActivity) context).findViewById(R.id.fab)).hide();
                 }
                 fragmentTransaction.commit();
                 saveFragment();
@@ -72,10 +76,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         return null != videos ? videos.size() : 0;
     }
 
-    public VideoAdapter(Activity context, int resource, ArrayList<Video> videos, FragmentManager manager) {
+    public VideoAdapter(Activity context, int resource, ArrayList<Video> videos) {
         this.videos = videos;
         this.context = context;
-        this.manager = manager;
+        this.manager = ((VideoActivity) context).getSupportFragmentManager();
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {

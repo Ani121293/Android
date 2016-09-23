@@ -1,6 +1,7 @@
 package com.example.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -53,8 +54,10 @@ public class DetailsFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.action_search).setVisible(false).setEnabled(false);
-        menu.setGroupVisible(R.id.main_menu_group, false);
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            menu.findItem(R.id.action_search).setVisible(false).setEnabled(false);
+            menu.setGroupVisible(R.id.main_menu_group, false);
+        }
     }
 
     @Override
