@@ -26,6 +26,10 @@ import com.example.disney.myapplication.VideoActivity;
 import com.example.disney.myapplication.VideoAdapter;
 import com.example.test.video_proj_example.R;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ListFragment extends Fragment {
@@ -71,12 +75,35 @@ public class ListFragment extends Fragment {
         ((VideoActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         if (videoList == null) {
             videoList = new ArrayList<>();
-            for (int i = 0; i < 10; ++i) {
-                videoList.add(new Video("Video", i, "Here will be the decription of video", R.mipmap.ic_video_image));
+            //starting to parse 'data.xml'
+            XmlPullParser parser = getResources().getXml(R.xml.data);
+            try {
+                while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
+                    switch (parser.getEventType()) {
+                        case XmlPullParser.START_TAG:
+                            for (int i = 0; i < parser.getAttributeCount(); i++) {
+                                videoList.add(new Video(parser.getAttributeValue(1),
+                                        Integer.valueOf(parser.getAttributeValue(0)),
+                                        parser.getAttributeValue(2), R.mipmap.ic_video_image));
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+                    parser.next();
+                }
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            for (int j = 10; j < 17; ++j) {
-                videoList.add(new Video("Prestige", j, "Here will be the decription of video", R.mipmap.ic_video_image));
-            }
+            //end of parsing
+//            for (int i = 0; i < 10; ++i) {
+//                videoList.add(new Video("Video", i, "Here will be the decription of video", R.mipmap.ic_video_image));
+//            }
+//            for (int j = 10; j < 17; ++j) {
+//                videoList.add(new Video("Prestige", j, "Here will be the decription of video", R.mipmap.ic_video_image));
+//            }
         }
         this.inflater = inflater;
         view = inflater.inflate(R.layout.list_fragment, container, false);
@@ -99,7 +126,7 @@ public class ListFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 String name = ((EditText) layout.findViewById(R.id.videoNameAlert)).getText().toString();
                 String description = ((EditText) layout.findViewById(R.id.videoDescAlert)).getText().toString();
-                videoList.add(new Video(name, videoList.size(), description, R.mipmap.ic_video_image));
+                videoList.add(new Video(name, videoList.size() + 1, description, R.mipmap.ic_video_image));
                 adapter.notifyItemInserted(videoList.size());
                 adapter.notifyDataSetChanged();
             }
