@@ -81,11 +81,10 @@ public class ListFragment extends Fragment {
                 while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
                     switch (parser.getEventType()) {
                         case XmlPullParser.START_TAG:
-                            for (int i = 0; i < parser.getAttributeCount(); i++) {
-                                videoList.add(new Video(parser.getAttributeValue(1),
-                                        Integer.valueOf(parser.getAttributeValue(0)),
-                                        parser.getAttributeValue(2), R.mipmap.ic_video_image));
-                                break;
+                             if(parser.getAttributeCount() > 2) {
+                                 videoList.add(new Video(parser.getAttributeValue(1),
+                                         Integer.valueOf(parser.getAttributeValue(0)),
+                                         parser.getAttributeValue(2), R.mipmap.ic_video_image));
                             }
                         default:
                             break;
@@ -97,13 +96,6 @@ public class ListFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //end of parsing
-//            for (int i = 0; i < 10; ++i) {
-//                videoList.add(new Video("Video", i, "Here will be the decription of video", R.mipmap.ic_video_image));
-//            }
-//            for (int j = 10; j < 17; ++j) {
-//                videoList.add(new Video("Prestige", j, "Here will be the decription of video", R.mipmap.ic_video_image));
-//            }
         }
         this.inflater = inflater;
         view = inflater.inflate(R.layout.list_fragment, container, false);
