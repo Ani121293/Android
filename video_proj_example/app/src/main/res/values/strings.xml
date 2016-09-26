@@ -8,5 +8,14 @@
     <string name="app_title">VideoPage)))</string>
     <string name="desc">video description</string>
     <string name="name">video name</string>
+    <string name="title_activity_film_genre">FilmGenre</string>
+
+    <string name="thrill">Thrill</string>
+    <string name="comedy">Comedy</string>
+    <string name="melodramy">Melodramy</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 
 </resources>

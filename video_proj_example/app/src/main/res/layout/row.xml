@@ -39,5 +39,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/ic_see_details" />
+
+        <ImageView
+            android:id="@+id/fav_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
     </LinearLayout>
 </android.support.v7.widget.CardView>

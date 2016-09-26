@@ -101,7 +101,7 @@ public class ListFragment extends Fragment {
         view = inflater.inflate(R.layout.list_fragment, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        adapter = new VideoAdapter(this.getActivity(), R.layout.list_fragment, videoList);
+        adapter = new VideoAdapter(this.getActivity(), videoList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
         initSwipe();

@@ -5,22 +5,42 @@ import android.media.Image;
 import java.io.Serializable;
 import java.sql.Blob;
 
-public class Video implements Serializable{
+public class Video implements Serializable {
     private String mVideoName;
     private Integer mNumber;
-    private String  mDescription;
+    private String mDescription;
     private Integer mImageId;
+    private Integer markFavorite;
+
     public Video(String name, Integer number, String description, Integer imageId) {
         mImageId = imageId;
         mVideoName = name;
         mNumber = number;
         mDescription = description;
     }
-    public Video(){
+
+    public Video(String name, Integer number, String description, Integer imageId, Integer favoriteImageId) {
+        mImageId = imageId;
+        mVideoName = name;
+        mNumber = number;
+        mDescription = description;
+        markFavorite = favoriteImageId;
+    }
+
+    public Video() {
         mImageId = 0;
         mVideoName = "";
         mNumber = 0;
         mDescription = "";
+        markFavorite = 0;
+    }
+
+    public Integer getMarkFavorite() {
+        return markFavorite;
+    }
+
+    public void setMarkFavorite(Integer markFavorite) {
+        this.markFavorite = markFavorite;
     }
 
     public Integer getmImageId() {
@@ -39,14 +59,6 @@ public class Video implements Serializable{
         this.mDescription = mDescription;
     }
 
-    public Image getmImage() {
-        return mImage;
-    }
-
-    public void setmImage(Image mImage) {
-        this.mImage = mImage;
-    }
-
     public Blob getmInfo() {
         return mInfo;
     }
@@ -57,9 +69,6 @@ public class Video implements Serializable{
 
     private Image mImage;
     private Blob mInfo;
-
-
-
 
 
     public Integer getmNumber() {
