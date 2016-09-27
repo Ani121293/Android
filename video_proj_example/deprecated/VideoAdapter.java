@@ -1,4 +1,4 @@
-package com.example.disney.myapplication;
+package com.example.disney.videoApp;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fragments.DetailsFragment;
-import com.example.fragments.ListFragment;
 import com.example.test.video_proj_example.R;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View v;
-        v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row, viewGroup, false);
+        v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_favorite, viewGroup, false);
         return new ViewHolder(v);
     }
 
@@ -60,7 +59,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                                                           detailsFragment, DETAILS_FRAGMENT);
                                               } else {
                                                   System.out.println("---------PORTRAIT DETAIL ADAPTER " + manager.getBackStackEntryCount());
-                                                  fragmentTransaction.addToBackStack(DETAILS_FRAGMENT).replace(R.id.fragment_container,
+                                                  fragmentTransaction.addToBackStack(DETAILS_FRAGMENT).replace(R.id.main_fragment_container,
                                                           detailsFragment, DETAILS_FRAGMENT);
                                                   ((FloatingActionButton) ((VideoActivity) context).findViewById(R.id.fab)).hide();
                                               }
@@ -113,7 +112,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             return mNumber;
         }
 
-        public void setmNumber(String number) {
+        public void setmNumber(Integer number) {
             this.mNumber.setText(number);
         }
 

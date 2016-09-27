@@ -1,4 +1,4 @@
-package com.example.disney.myapplication;
+package com.example.disney.videoApp;
 
 
 import android.app.SearchManager;
@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.favorite.FavoriteRecyclerAdapter;
 import com.example.fragments.DetailsFragment;
 import com.example.fragments.ListFragment;
 import com.example.test.video_proj_example.R;
@@ -25,10 +26,10 @@ import static android.graphics.Color.rgb;
 
 public class VideoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static final String LIST_FRAGMENT = "list fragment";
-    static final String DETAILS_FRAGMENT = "details fragment";
+    static final String LIST_FRAGMENT = "list_fragment";
+    static final String DETAILS_FRAGMENT = "details_fragment";
     static final String key = "lastSinglePaneFragment";
-    public static final String PREFERENCE = "com.example.disney.myapplication.VideoActivity.PREFERENCE";
+    public static final String PREFERENCE = "com.example.disney.videoApp.VideoActivity.PREFERENCE";
     boolean isDetailsOPened = false;
     private FragmentManager fm = getSupportFragmentManager();
 
@@ -43,12 +44,12 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         if (savedInstanceState != null) {
             isDetailsOPened = isDetailsOpened();
         }
-        if (!mDualPane && fm.findFragmentById(R.id.fragment_container) == null) {
+        if (!mDualPane && fm.findFragmentById(R.id.main_fragment_container) == null) {
             if (isDetailsOPened) {
                 openSinglePaneDetailFragment();
             } else {
                 ListFragment singleListFragment = getDetatchedMasterFragment(false);
-                fm.beginTransaction().add(R.id.fragment_container, singleListFragment, LIST_FRAGMENT)
+                fm.beginTransaction().add(R.id.main_fragment_container, singleListFragment, LIST_FRAGMENT)
                         .addToBackStack(LIST_FRAGMENT).commit();
             }
         }
@@ -90,7 +91,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         System.out.println("--------- DETAILS FRAGMENT " + fm.getBackStackEntryCount()+ " --- " + fm.getFragments());
         DetailsFragment detailFragment = (DetailsFragment) fm.findFragmentByTag(DETAILS_FRAGMENT);
         if (detailFragment == null) {
-            detailFragment = new DetailsFragment(new Video("", 0, "", 0));
+            detailFragment = new DetailsFragment(new Video(0,"", "", 0));
         } else {
             fm.beginTransaction().remove(detailFragment).commit();
             fm.executePendingTransactions();
@@ -102,7 +103,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         DetailsFragment detailFragment = getDetatchedDetailFragment();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, detailFragment, DETAILS_FRAGMENT);
+        fragmentTransaction.replace(R.id.main_fragment_container, detailFragment, DETAILS_FRAGMENT);
         fragmentTransaction.commit();
         ((FloatingActionButton)findViewById(R.id.fab)).hide();
     }
@@ -126,7 +127,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public boolean onQueryTextSubmit(String query) {
 // Reload listView corresponding to filtering of query
-                VideoAdapter listAdapter = ((ListFragment) getSupportFragmentManager().
+                FavoriteRecyclerAdapter listAdapter = ((ListFragment) getSupportFragmentManager().
                         findFragmentByTag(LIST_FRAGMENT)).getAdapter();
                 listAdapter.getFilter().filter(query);
                 searchView.clearFocus();
@@ -151,7 +152,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             } else {
                 System.out.println("--------- BACK TO LIST " + fm.getBackStackEntryCount()+ " --- " + fm.getFragments());
                 ListFragment singleListFragment = getDetatchedMasterFragment(true);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
                         singleListFragment, LIST_FRAGMENT).addToBackStack(LIST_FRAGMENT).commit();
                 ((FloatingActionButton)findViewById(R.id.fab)).show();
             }

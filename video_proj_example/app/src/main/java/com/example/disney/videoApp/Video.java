@@ -1,4 +1,4 @@
-package com.example.disney.myapplication;
+package com.example.disney.videoApp;
 
 import android.media.Image;
 
@@ -11,18 +11,19 @@ public class Video implements Serializable {
     private String mDescription;
     private Integer mImageId;
     private Integer markFavorite;
+    private Integer mshowDetailsImageID;
 
-    public Video(String name, Integer number, String description, Integer imageId) {
+    public Video(Integer number,String name,  String description, Integer imageId, Integer showDetailsImageID) {
         mImageId = imageId;
         mVideoName = name;
         mNumber = number;
         mDescription = description;
+        mshowDetailsImageID = showDetailsImageID;
     }
 
-    public Video(String name, Integer number, String description, Integer imageId, Integer favoriteImageId) {
+    public Video(String name, String description, Integer imageId, Integer favoriteImageId) {
         mImageId = imageId;
         mVideoName = name;
-        mNumber = number;
         mDescription = description;
         markFavorite = favoriteImageId;
     }
@@ -33,6 +34,15 @@ public class Video implements Serializable {
         mNumber = 0;
         mDescription = "";
         markFavorite = 0;
+        mshowDetailsImageID = 0;
+    }
+
+    public Integer getMshowDetailsImageID() {
+        return mshowDetailsImageID;
+    }
+
+    public void setMshowDetailsImageID(Integer mshowDetailsImageID) {
+        this.mshowDetailsImageID = mshowDetailsImageID;
     }
 
     public Integer getMarkFavorite() {

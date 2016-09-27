@@ -21,9 +21,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.example.disney.myapplication.Video;
-import com.example.disney.myapplication.VideoActivity;
-import com.example.disney.myapplication.VideoAdapter;
+import com.example.disney.videoApp.FilmGenre;
+import com.example.disney.videoApp.Video;
+import com.example.favorite.FavoriteRecyclerAdapter;
 import com.example.test.video_proj_example.R;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -32,7 +32,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ListFragment extends Fragment {
+public class FavoriteFragment extends Fragment {
 
     public static ArrayList<Video> videoList;
     private View view;
@@ -43,16 +43,16 @@ public class ListFragment extends Fragment {
     private Paint p = new Paint();
     private LayoutInflater inflater;
 
-    public VideoAdapter getAdapter() {
+    private FavoriteRecyclerAdapter adapter = null;
+    private Integer currentRowPosition = 0;
+
+    public FavoriteRecyclerAdapter getAdapter() {
         return adapter;
     }
 
-    public void setAdapter(VideoAdapter adapter) {
+    public void setAdapter(FavoriteRecyclerAdapter adapter) {
         this.adapter = adapter;
     }
-
-    private VideoAdapter adapter = null;
-    private Integer currentRowPosition = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,9 +70,9 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        ((VideoActivity) getActivity()).getSupportActionBar().setTitle("List");
-        ((VideoActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
-        ((VideoActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((FilmGenre) getActivity()).getSupportActionBar().setTitle("FAVORITE");
+        ((FilmGenre) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
+        ((FilmGenre) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         if (videoList == null) {
             videoList = new ArrayList<>();
             //starting to parse 'data.xml'
@@ -82,9 +82,9 @@ public class ListFragment extends Fragment {
                     switch (parser.getEventType()) {
                         case XmlPullParser.START_TAG:
                              if(parser.getAttributeCount() > 2) {
-                                 videoList.add(new Video(parser.getAttributeValue(1),
-                                         Integer.valueOf(parser.getAttributeValue(0)),
-                                         parser.getAttributeValue(2), R.mipmap.ic_video_image));
+                                 videoList.add(new Video(Integer.valueOf(parser.getAttributeValue(0)),
+                                         parser.getAttributeValue(1),
+                                         parser.getAttributeValue(2), R.mipmap.ic_video_image, R.drawable.ic_see_details));
                             }
                         default:
                             break;
@@ -98,10 +98,13 @@ public class ListFragment extends Fragment {
             }
         }
         this.inflater = inflater;
-        view = inflater.inflate(R.layout.list_fragment, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        view = inflater.inflate(R.layout.favorite_fragment, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.favorite_recyclerView);
         recyclerView.setHasFixedSize(true);
-        adapter = new VideoAdapter(this.getActivity(), videoList);
+        adapter = new FavoriteRecyclerAdapter(this.getActivity(), videoList);
+        if(adapter.equals(null)){
+            System.out.println("------------After creating Adapter Constructor" );
+        }
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
         initSwipe();
@@ -118,7 +121,7 @@ public class ListFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 String name = ((EditText) layout.findViewById(R.id.videoNameAlert)).getText().toString();
                 String description = ((EditText) layout.findViewById(R.id.videoDescAlert)).getText().toString();
-                videoList.add(new Video(name, videoList.size() + 1, description, R.mipmap.ic_video_image));
+                videoList.add(new Video(videoList.size() + 1, name, description, R.mipmap.ic_video_image, R.drawable.ic_see_details));
                 adapter.notifyItemInserted(videoList.size());
                 adapter.notifyDataSetChanged();
             }
