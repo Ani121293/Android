@@ -67,11 +67,13 @@ public class GenreFragment extends Fragment {
             }
         }
         View view = inflater.inflate(R.layout.playlist_fragment, container, false);
+        System.out.println("--------GenreFragment " + getActivity().getSupportFragmentManager().getFragments());
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.playlist_recyclerView);
         PlaylistRecyclerAdapter adapter = new PlaylistRecyclerAdapter(this.getActivity(), videoList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return view;
     }
+
 }
 

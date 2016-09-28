@@ -2,6 +2,7 @@ package com.example.playlist;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,9 +52,15 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistViewHo
             @Override
             public void onClick(View v) {
                 FilmGenre.mViewPager.setVisibility(View.GONE);
-                ((FilmGenre) context).findViewById(R.id.fab).setVisibility(View.INVISIBLE);
-                fm.beginTransaction().replace(R.id.main_fragment_container, new DetailsFragment(videos.get(position)),
+                DetailsFragment detailsFragment  =  new DetailsFragment(videos.get(position));
+                Bundle args = new Bundle();
+                args.putString("lastFragment", "playlist");
+                detailsFragment.setArguments(args);
+                FilmGenre.isFavorit = 2;
+                        ((FilmGenre) context).findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+                fm.beginTransaction().replace(R.id.main_fragment_container, detailsFragment,
                         FilmGenre.DETAILS_FRAGMENT).addToBackStack(FilmGenre.DETAILS_FRAGMENT).commit();
+
             }
         });
     }

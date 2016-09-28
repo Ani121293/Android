@@ -3,6 +3,7 @@ package com.example.disney.videoApp;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,11 +32,13 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
     public static final String FAVORIT_FRAGMENT = "favorite_fragment";
     public static final String DETAILS_FRAGMENT = "details_fragment";
     private FragmentManager fm = getSupportFragmentManager();
+    public static ActionBarDrawerToggle toggle;
+    public static  Integer isFavorit = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.main);isFavorit = 2;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -45,7 +49,7 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -53,25 +57,9 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private FavoriteFragment getDetatchedMasterFragment(boolean popBackStack) {
-        System.out.println("--------- List FRAGMENT " + fm.getBackStackEntryCount() + " --- " + fm.getFragments());
-        FavoriteFragment masterFragment = (FavoriteFragment) fm.findFragmentByTag(FAVORIT_FRAGMENT);
-        if (masterFragment == null) {
-            masterFragment = new FavoriteFragment();
-        } else {
-            if (popBackStack) {
-                System.out.println("--------- BEFORE POP LIST " + fm.getBackStackEntryCount());
-                fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                System.out.println("---------AFTER POP " + fm.getBackStackEntryCount());
-            }
-            fm.beginTransaction().remove(masterFragment).commit();
-            fm.executePendingTransactions();
-        }
-        return masterFragment;
-    }
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        System.out.println("-------------------onNavigationItemSelected");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.playlist) {
@@ -79,15 +67,18 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
                 fm.beginTransaction().remove(fm.findFragmentByTag(FAVORIT_FRAGMENT)).commit();
             }
             if (fm.findFragmentByTag(DETAILS_FRAGMENT) != null) {
+                System.out.println("---------from PLAYLIST TO DETAILS");
                 fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
                 fm.executePendingTransactions();
             }
+
             this.getSupportActionBar().setTitle("PLAYLIST");
             this.mViewPager.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.favorits) {
+            System.out.println("---------isFAvorite Selected");
+            isFavorit =1;
             this.mViewPager.setVisibility(View.INVISIBLE);
-//            FavoriteFragment singleListFragment = getDetatchedMasterFragment(false);
             if (fm.findFragmentByTag(DETAILS_FRAGMENT) != null) {
                 fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
                 fm.executePendingTransactions();
@@ -96,6 +87,7 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
                     .addToBackStack(FAVORIT_FRAGMENT).commit();
             this.getSupportActionBar().setTitle("FAVORITES");
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -120,10 +112,9 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-// Reload listView corresponding to filtering of query
                 if (R.id.main_fragment_container != 0) {
                     FavoriteRecyclerAdapter listAdapter = ((FavoriteFragment) getSupportFragmentManager().
-                            findFragmentByTag(DETAILS_FRAGMENT)).getAdapter();
+                            findFragmentByTag(FAVORIT_FRAGMENT)).getAdapter();
                     listAdapter.getFilter().filter(query);
                 } else {
                     mPagerAdapter.getFilter().filter(query);
@@ -142,11 +133,7 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -154,4 +141,29 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
         return super.onOptionsItemSelected(item);
     }
 
+
+
+    @Override
+    public void onBackPressed() {
+        if(fm.getBackStackEntryCount() == 1 && 2 != isFavorit){
+            System.out.println("-----------------------THE LAST FRAGMENT" + fm.getFragments());
+            finish();
+        }else if(1 == isFavorit){
+            System.out.println("-----------------------BACK TO FAVORITE" + fm.getFragments());
+            fm.popBackStackImmediate();
+            if(!toggle.isDrawerIndicatorEnabled()){
+                toggle.setDrawerIndicatorEnabled(true);
+            }
+        }else if(2 == isFavorit){
+            System.out.println("------------BAck to PLAYLIST");
+            FilmGenre.mViewPager.setVisibility(View.VISIBLE);
+            fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
+            if(!toggle.isDrawerIndicatorEnabled()){
+                toggle.setDrawerIndicatorEnabled(true);
+            }
+        }
+        else {
+            super.onBackPressed();
+        };
+    }
 }

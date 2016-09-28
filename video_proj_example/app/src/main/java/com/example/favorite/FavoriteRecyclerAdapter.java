@@ -1,6 +1,7 @@
 package com.example.favorite;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,14 +37,12 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteViewHo
     @Override
     public FavoriteViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_favorite, viewGroup,false);
-        System.out.println("--------------------" + videos.get(i).getmNumber());
         return new FavoriteViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(FavoriteViewHolder favoriteViewHolder, int i) {
         position = i;
-        System.out.println("--------------------" + videos.get(i).getmNumber());
         favoriteViewHolder.setmNumber(videos.get(i).getmNumber());
         favoriteViewHolder.setmVideoName(videos.get(i).getmVideoName());
         favoriteViewHolder.setmShowDetails(videos.get(i).getMshowDetailsImageID());
@@ -52,8 +51,12 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteViewHo
             public void onClick(View v) {
                 FilmGenre.mViewPager.setVisibility(View.INVISIBLE);
                 ((FilmGenre) context).findViewById(R.id.fab).setVisibility(View.INVISIBLE);
-                fm.beginTransaction().replace(R.id.main_fragment_container,
-                        new DetailsFragment(videos.get(position)),FilmGenre.DETAILS_FRAGMENT)
+                DetailsFragment detailsFragment =  new DetailsFragment(videos.get(position));
+                Bundle args = new Bundle();
+                args.putString("lastFragment", "favorite");
+                detailsFragment.setArguments(args);
+                FilmGenre.toggle.setDrawerIndicatorEnabled(false);
+                fm.beginTransaction().replace(R.id.main_fragment_container,detailsFragment,FilmGenre.DETAILS_FRAGMENT)
                         .addToBackStack(FilmGenre.DETAILS_FRAGMENT).commit();
             }
         });
