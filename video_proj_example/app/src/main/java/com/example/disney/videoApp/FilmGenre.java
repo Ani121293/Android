@@ -78,12 +78,20 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
             if (fm.findFragmentByTag(FAVORIT_FRAGMENT) != null) {
                 fm.beginTransaction().remove(fm.findFragmentByTag(FAVORIT_FRAGMENT)).commit();
             }
+            if (fm.findFragmentByTag(DETAILS_FRAGMENT) != null) {
+                fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
+                fm.executePendingTransactions();
+            }
             this.getSupportActionBar().setTitle("PLAYLIST");
             this.mViewPager.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.favorits) {
             this.mViewPager.setVisibility(View.INVISIBLE);
 //            FavoriteFragment singleListFragment = getDetatchedMasterFragment(false);
+            if (fm.findFragmentByTag(DETAILS_FRAGMENT) != null) {
+                fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
+                fm.executePendingTransactions();
+            }
             fm.beginTransaction().add(R.id.main_fragment_container, new FavoriteFragment(), FAVORIT_FRAGMENT)
                     .addToBackStack(FAVORIT_FRAGMENT).commit();
             this.getSupportActionBar().setTitle("FAVORITES");

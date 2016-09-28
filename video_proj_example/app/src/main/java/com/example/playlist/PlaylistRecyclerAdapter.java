@@ -52,7 +52,8 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistViewHo
             public void onClick(View v) {
                 FilmGenre.mViewPager.setVisibility(View.GONE);
                 ((FilmGenre) context).findViewById(R.id.fab).setVisibility(View.INVISIBLE);
-                fm.beginTransaction().replace(R.id.main_fragment_container, new DetailsFragment(videos.get(position))).addToBackStack(FilmGenre.DETAILS_FRAGMENT).commit();
+                fm.beginTransaction().replace(R.id.main_fragment_container, new DetailsFragment(videos.get(position)),
+                        FilmGenre.DETAILS_FRAGMENT).addToBackStack(FilmGenre.DETAILS_FRAGMENT).commit();
             }
         });
     }
