@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.disney.videoApp.GenrePagerAdapter;
+import com.example.disney.videoApp.FilmGenre;
 import com.example.disney.videoApp.Video;
 import com.example.playlist.PlaylistRecyclerAdapter;
 import com.example.test.video_proj_example.R;

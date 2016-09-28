@@ -2,7 +2,6 @@ package com.example.disney.videoApp;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +9,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +19,6 @@ import android.view.View;
 
 import com.example.favorite.FavoriteRecyclerAdapter;
 import com.example.fragments.FavoriteFragment;
-import com.example.fragments.GenreFragment;
 import com.example.test.video_proj_example.R;
 
 public class FilmGenre extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,7 +36,6 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("PLAYLIST");
         setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {
@@ -46,12 +44,11 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
             mViewPager.setAdapter(mPagerAdapter);
         }
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -81,6 +78,7 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
             if (fm.findFragmentByTag(FAVORIT_FRAGMENT) != null) {
                 fm.beginTransaction().remove(fm.findFragmentByTag(FAVORIT_FRAGMENT)).commit();
             }
+            this.getSupportActionBar().setTitle("PLAYLIST");
             this.mViewPager.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.favorits) {
@@ -88,6 +86,7 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
 //            FavoriteFragment singleListFragment = getDetatchedMasterFragment(false);
             fm.beginTransaction().add(R.id.main_fragment_container, new FavoriteFragment(), FAVORIT_FRAGMENT)
                     .addToBackStack(FAVORIT_FRAGMENT).commit();
+            this.getSupportActionBar().setTitle("FAVORITES");
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

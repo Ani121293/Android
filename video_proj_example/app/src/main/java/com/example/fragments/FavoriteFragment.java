@@ -70,7 +70,6 @@ public class FavoriteFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        ((FilmGenre) getActivity()).getSupportActionBar().setTitle("FAVORITE");
         ((FilmGenre) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
         ((FilmGenre) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         if (videoList == null) {
