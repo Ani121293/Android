@@ -57,7 +57,6 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         if (savedInstanceState != null) {
             videoList = (ArrayList<Video>) savedInstanceState.getSerializable(key);
 //                Integer currentPosition = savedInstanceState.getInt("currentRowPosition");
@@ -70,6 +69,7 @@ public class FavoriteFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         ((FilmGenre) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
         ((FilmGenre) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         if (videoList == null) {
@@ -83,7 +83,8 @@ public class FavoriteFragment extends Fragment {
                              if(parser.getAttributeCount() > 2) {
                                  videoList.add(new Video(Integer.valueOf(parser.getAttributeValue(0)),
                                          parser.getAttributeValue(1),
-                                         parser.getAttributeValue(2), R.mipmap.ic_video_image, R.drawable.ic_see_details));
+                                         parser.getAttributeValue(2),
+                                         R.mipmap.ic_video_image, R.drawable.ic_see_details));
                             }
                         default:
                             break;
@@ -120,7 +121,8 @@ public class FavoriteFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 String name = ((EditText) layout.findViewById(R.id.videoNameAlert)).getText().toString();
                 String description = ((EditText) layout.findViewById(R.id.videoDescAlert)).getText().toString();
-                videoList.add(new Video(videoList.size() + 1, name, description, R.mipmap.ic_video_image, R.drawable.ic_see_details));
+                videoList.add(new Video(videoList.size() + 1, name, description,
+                        R.mipmap.ic_video_image, R.drawable.ic_see_details));
                 adapter.notifyItemInserted(videoList.size());
                 adapter.notifyDataSetChanged();
             }
@@ -135,10 +137,12 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void initSwipe() {
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper
+                .SimpleCallback(0,ItemTouchHelper.LEFT) {
 
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
                 return false;
             }
 
@@ -205,12 +209,13 @@ public class FavoriteFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.changeView:
+                System.out.println("----> pressed changeView button");
                 if (recyclerView.getLayoutManager().getClass().equals(linearLayoutManager.getClass())) {
                     isLinear = false;
                     recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                 } else {
                     isLinear = true;
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 }
                 return true;
             default:

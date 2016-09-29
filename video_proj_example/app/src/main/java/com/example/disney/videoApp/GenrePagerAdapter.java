@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
-import com.example.fragments.GenreFragment;
+import com.example.fragments.PlaylistFragment;
 import com.example.test.video_proj_example.R;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class GenrePagerAdapter extends FragmentPagerAdapter  implements Filterab
 
     @Override
     public Fragment getItem(int position) {
-        return GenreFragment.newInstance(position + 1);
+        return PlaylistFragment.newInstance(position + 1);
     }
 
     @Override
@@ -64,11 +64,11 @@ public class GenrePagerAdapter extends FragmentPagerAdapter  implements Filterab
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
             if (constraint == null || constraint.length() == 0) {
-                filterResults.values = GenreFragment.videoList;
-                filterResults.count = GenreFragment.videoList.size();
+                filterResults.values = PlaylistFragment.videoList;
+                filterResults.count = PlaylistFragment.videoList.size();
             } else {
                 ArrayList<Video> filteredVideos = new ArrayList<>();
-                for (Video video : GenreFragment.videoList) {
+                for (Video video : PlaylistFragment.videoList) {
                     if (video.getmVideoName().toUpperCase().startsWith(constraint.toString().toUpperCase())) {
                         System.out.println("------FILTERED VIDEO  " + filteredVideos.size());
                         filteredVideos.add(video);
@@ -84,7 +84,7 @@ public class GenrePagerAdapter extends FragmentPagerAdapter  implements Filterab
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (0 != results.count) {
-                GenreFragment.videoList = (ArrayList<Video>) results.values;
+                PlaylistFragment.videoList = (ArrayList<Video>) results.values;
                 notifyDataSetChanged();
             }
 

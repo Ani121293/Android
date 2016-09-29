@@ -3,7 +3,6 @@ package com.example.disney.videoApp;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +21,7 @@ import com.example.favorite.FavoriteRecyclerAdapter;
 import com.example.fragments.FavoriteFragment;
 import com.example.test.video_proj_example.R;
 
-public class FilmGenre extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     GenrePagerAdapter mPagerAdapter;
 
@@ -59,7 +57,6 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        System.out.println("-------------------onNavigationItemSelected");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.playlist) {
@@ -67,16 +64,13 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
                 fm.beginTransaction().remove(fm.findFragmentByTag(FAVORIT_FRAGMENT)).commit();
             }
             if (fm.findFragmentByTag(DETAILS_FRAGMENT) != null) {
-                System.out.println("---------from PLAYLIST TO DETAILS");
                 fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
                 fm.executePendingTransactions();
             }
-
             this.getSupportActionBar().setTitle("PLAYLIST");
             this.mViewPager.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.favorits) {
-            System.out.println("---------isFAvorite Selected");
             isFavorit =1;
             this.mViewPager.setVisibility(View.INVISIBLE);
             if (fm.findFragmentByTag(DETAILS_FRAGMENT) != null) {
@@ -87,7 +81,6 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
                     .addToBackStack(FAVORIT_FRAGMENT).commit();
             this.getSupportActionBar().setTitle("FAVORITES");
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -96,7 +89,6 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_film_genre, menu);
         SearchManager searchManager = (SearchManager)
                 getSystemService(Context.SEARCH_SERVICE);
@@ -105,7 +97,6 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
         searchView.setSearchableInfo(searchManager.
                 getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search your lovely video");
-
 
 // Listener for the query in search
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -134,10 +125,10 @@ public class FilmGenre extends AppCompatActivity implements NavigationView.OnNav
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_settings:
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

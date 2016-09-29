@@ -7,7 +7,7 @@
     android:layout_marginBottom="15dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    card_view:cardBackgroundColor="@color/DarkGray"
+    card_view:cardBackgroundColor="@color/AliceBlue"
     card_view:cardCornerRadius="15dp"
     card_view:cardElevation="5dp"
     card_view:contentPadding="10dp">
@@ -31,11 +31,12 @@
                 android:layout_weight="5"
                 android:src="@drawable/ic_see_details" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/fav_icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@color/AliceBlue"/>
 
         </LinearLayout>
 

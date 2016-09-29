@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.Toast;
 
 import com.example.disney.videoApp.FilmGenre;
 import com.example.disney.videoApp.Video;
@@ -43,7 +44,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistViewHo
     }
 
     @Override
-    public void onBindViewHolder(PlaylistViewHolder playlistViewHolder, int i) {
+    public void onBindViewHolder(final PlaylistViewHolder playlistViewHolder, int i) {
         position = i;
         playlistViewHolder.videoName.setText(videos.get(i).getmVideoName());
         playlistViewHolder.videoPicture.setImageResource(videos.get(i).getmImageId());
@@ -52,15 +53,22 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistViewHo
             @Override
             public void onClick(View v) {
                 FilmGenre.mViewPager.setVisibility(View.GONE);
-                DetailsFragment detailsFragment  =  new DetailsFragment(videos.get(position));
+                DetailsFragment detailsFragment = new DetailsFragment(videos.get(position));
                 Bundle args = new Bundle();
                 args.putString("lastFragment", "playlist");
                 detailsFragment.setArguments(args);
                 FilmGenre.isFavorit = 2;
-                        ((FilmGenre) context).findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+                ((FilmGenre) context).findViewById(R.id.fab).setVisibility(View.INVISIBLE);
                 fm.beginTransaction().replace(R.id.main_fragment_container, detailsFragment,
                         FilmGenre.DETAILS_FRAGMENT).addToBackStack(FilmGenre.DETAILS_FRAGMENT).commit();
 
+            }
+        });
+        playlistViewHolder.favIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playlistViewHolder.favIcon.setImageResource(android.R.drawable.star_big_on);
+                Toast.makeText(context, "The movie added into your favorits", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -69,7 +77,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistViewHo
     public int getItemCount() {
         return null != videos ? videos.size() : 0;
     }
-
 
 
     @Override

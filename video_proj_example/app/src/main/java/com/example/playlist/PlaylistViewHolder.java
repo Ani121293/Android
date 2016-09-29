@@ -2,6 +2,7 @@ package com.example.playlist;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ public class PlaylistViewHolder extends RecyclerView.ViewHolder {
 
     View itemView;
     ImageView videoPicture;
-    ImageView favIcon;
+    ImageButton favIcon;
     TextView videoName;
 
 
@@ -22,7 +23,7 @@ public class PlaylistViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.itemView = itemView;
         videoPicture = (ImageView) itemView.findViewById(R.id.video_picture_play);
-        favIcon = (ImageView) itemView.findViewById(R.id.fav_icon);
+        favIcon = (ImageButton) itemView.findViewById(R.id.fav_icon);
         videoName = (TextView) itemView.findViewById(R.id.video_name_play);
     }
 }
