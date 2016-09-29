@@ -21,7 +21,7 @@ import com.example.favorite.FavoriteRecyclerAdapter;
 import com.example.fragments.FavoriteFragment;
 import com.example.test.video_proj_example.R;
 
-public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class FilmGenre extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     GenrePagerAdapter mPagerAdapter;
 
@@ -31,7 +31,7 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
     public static final String DETAILS_FRAGMENT = "details_fragment";
     private FragmentManager fm = getSupportFragmentManager();
     public static ActionBarDrawerToggle toggle;
-    public static  Integer isFavorit = 0;
+    public static Integer isFavorit = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,32 +39,22 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
         setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mPagerAdapter = new GenrePagerAdapter(getSupportFragmentManager(), this);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
+            @Override
+            public void onPageSelected(int position) {
+            }
 
-        if (savedInstanceState == null) {
-            mPagerAdapter = new GenrePagerAdapter(getSupportFragmentManager(), this);
-            mViewPager = (ViewPager) findViewById(R.id.pager);
-            mViewPager.setAdapter(mPagerAdapter);
-            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-
-
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
-        }
-
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -90,8 +80,9 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
             this.mViewPager.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.favorits) {
-            isFavorit =1;
+            isFavorit = 1;
             this.mViewPager.setVisibility(View.INVISIBLE);
+            fm.popBackStackImmediate();
             if (fm.findFragmentByTag(DETAILS_FRAGMENT) != null) {
                 fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
                 fm.popBackStackImmediate();
@@ -122,7 +113,7 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (fm.findFragmentByTag(FAVORIT_FRAGMENT)!=null) {
+                if (fm.findFragmentByTag(FAVORIT_FRAGMENT) != null) {
                     System.out.println("------------Filter Favorite");
                     FavoriteRecyclerAdapter listAdapter = ((FavoriteFragment) fm.
                             findFragmentByTag(FAVORIT_FRAGMENT)).getAdapter();
@@ -146,7 +137,7 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.action_settings:
                 return true;
         }
@@ -154,31 +145,30 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
     }
 
 
-
     @Override
     public void onBackPressed() {
-        if(fm.getBackStackEntryCount() == 0 || fm.getBackStackEntryCount() == 1 && 1==isFavorit){
-            System.out.println("-----------------------THE LAST FRAGMENT");
+        if ((fm.getBackStackEntryCount() == 1 && isFavorit != 2) ||
+                (fm.getBackStackEntryCount() == 0 && isFavorit == 2)) {
             finish();
-        }else if(1 == isFavorit){
-            System.out.println("-----------------------BACK TO FAVORITE " + fm.getBackStackEntryCount());
+        } else if (1 == isFavorit) {
             fm.popBackStackImmediate();
-            if(!toggle.isDrawerIndicatorEnabled()){
+            this.getSupportActionBar().setTitle("FAVORITES");
+            if (!toggle.isDrawerIndicatorEnabled()) {
                 toggle.setDrawerIndicatorEnabled(true);
             }
-        }else if(2 == isFavorit){
-            System.out.println("------------BAck to PLAYLIST "+ fm.getBackStackEntryCount());
+        } else if (2 == isFavorit) {
             FilmGenre.mViewPager.setVisibility(View.VISIBLE);
-            if(fm.findFragmentByTag(DETAILS_FRAGMENT)!=null) {
-                System.out.println("------------ IN REMOVE DETAILS");
+            this.getSupportActionBar().setTitle("PLAYLIST");
+            if (fm.findFragmentByTag(DETAILS_FRAGMENT) != null) {
                 fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
                 fm.popBackStackImmediate();
-            }if(!toggle.isDrawerIndicatorEnabled()){
+            }
+            if (!toggle.isDrawerIndicatorEnabled()) {
                 toggle.setDrawerIndicatorEnabled(true);
             }
-        }
-        else {
+        } else {
             super.onBackPressed();
-        };
+        }
+        ;
     }
 }

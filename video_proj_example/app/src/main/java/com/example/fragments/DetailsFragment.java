@@ -34,7 +34,7 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         FilmGenre.toggle.setDrawerIndicatorEnabled(false);
-        FilmGenre.toggle.setHomeAsUpIndicator(android.R.drawable.btn_star);
+        FilmGenre.toggle.setHomeAsUpIndicator(R.drawable.ic_back_btn);
         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,29 +62,29 @@ public class DetailsFragment extends Fragment {
         return view;
     }
 
-    //    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
-//            menu.findItem(R.id.action_search).setVisible(false).setEnabled(false);
-//            menu.setGroupVisible(R.id.main_menu_group, false);
-//        }
-//    }
-//
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        System.out.println("-----------------------onOptionsItemSelected");
-        if (FilmGenre.toggle.isDrawerIndicatorEnabled() &&
-                FilmGenre.toggle.onOptionsItemSelected(item)) {
-            return true;
-        } else if (item.getItemId() == android.R.id.home &&
-                getActivity().getSupportFragmentManager().popBackStackImmediate()) {
-            System.out.println("--------------MENU Item Selected");
-            getActivity().onBackPressed();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            menu.findItem(R.id.action_search).setVisible(false).setEnabled(false);
+            menu.setGroupVisible(R.id.main_menu_group, false);
         }
     }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        System.out.println("-----------------------onOptionsItemSelected");
+//        if (FilmGenre.toggle.isDrawerIndicatorEnabled() &&
+//                FilmGenre.toggle.onOptionsItemSelected(item)) {
+//            return true;
+//        } else if (item.getItemId() == android.R.id.home &&
+//                getActivity().getSupportFragmentManager().popBackStackImmediate()) {
+//            System.out.println("--------------MENU Item Selected");
+//            getActivity().onBackPressed();
+//            return true;
+//        } else {
+//            return super.onOptionsItemSelected(item);
+//        }
+//    }
 
 
     @Override
