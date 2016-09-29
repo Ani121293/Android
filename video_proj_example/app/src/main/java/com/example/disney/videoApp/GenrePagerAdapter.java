@@ -64,11 +64,11 @@ public class GenrePagerAdapter extends FragmentPagerAdapter  implements Filterab
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
             if (constraint == null || constraint.length() == 0) {
-                filterResults.values = PlaylistFragment.videoList;
-                filterResults.count = PlaylistFragment.videoList.size();
+                filterResults.values = PlaylistFragment.videoListComedy;
+                filterResults.count = PlaylistFragment.videoListComedy.size();
             } else {
                 ArrayList<Video> filteredVideos = new ArrayList<>();
-                for (Video video : PlaylistFragment.videoList) {
+                for (Video video : PlaylistFragment.videoListComedy) {
                     if (video.getmVideoName().toUpperCase().startsWith(constraint.toString().toUpperCase())) {
                         System.out.println("------FILTERED VIDEO  " + filteredVideos.size());
                         filteredVideos.add(video);
@@ -84,7 +84,7 @@ public class GenrePagerAdapter extends FragmentPagerAdapter  implements Filterab
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (0 != results.count) {
-                PlaylistFragment.videoList = (ArrayList<Video>) results.values;
+                PlaylistFragment.videoListComedy = (ArrayList<Video>) results.values;
                 notifyDataSetChanged();
             }
 

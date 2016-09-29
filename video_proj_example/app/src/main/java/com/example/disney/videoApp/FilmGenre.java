@@ -36,14 +36,33 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);isFavorit = 2;
+        setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         if (savedInstanceState == null) {
             mPagerAdapter = new GenrePagerAdapter(getSupportFragmentManager(), this);
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mPagerAdapter);
+            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -75,7 +94,7 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
             this.mViewPager.setVisibility(View.INVISIBLE);
             if (fm.findFragmentByTag(DETAILS_FRAGMENT) != null) {
                 fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
-                fm.executePendingTransactions();
+                fm.popBackStackImmediate();
             }
             fm.beginTransaction().add(R.id.main_fragment_container, new FavoriteFragment(), FAVORIT_FRAGMENT)
                     .addToBackStack(FAVORIT_FRAGMENT).commit();
@@ -103,11 +122,13 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (R.id.main_fragment_container != 0) {
-                    FavoriteRecyclerAdapter listAdapter = ((FavoriteFragment) getSupportFragmentManager().
+                if (fm.findFragmentByTag(FAVORIT_FRAGMENT)!=null) {
+                    System.out.println("------------Filter Favorite");
+                    FavoriteRecyclerAdapter listAdapter = ((FavoriteFragment) fm.
                             findFragmentByTag(FAVORIT_FRAGMENT)).getAdapter();
                     listAdapter.getFilter().filter(query);
                 } else {
+                    System.out.println("------------Filter Playlist");
                     mPagerAdapter.getFilter().filter(query);
                 }
                 searchView.clearFocus();
@@ -136,20 +157,23 @@ public class  FilmGenre extends AppCompatActivity implements NavigationView.OnNa
 
     @Override
     public void onBackPressed() {
-        if(fm.getBackStackEntryCount() == 1 && 2 != isFavorit){
-            System.out.println("-----------------------THE LAST FRAGMENT" + fm.getFragments());
+        if(fm.getBackStackEntryCount() == 0 || fm.getBackStackEntryCount() == 1 && 1==isFavorit){
+            System.out.println("-----------------------THE LAST FRAGMENT");
             finish();
         }else if(1 == isFavorit){
-            System.out.println("-----------------------BACK TO FAVORITE" + fm.getFragments());
+            System.out.println("-----------------------BACK TO FAVORITE " + fm.getBackStackEntryCount());
             fm.popBackStackImmediate();
             if(!toggle.isDrawerIndicatorEnabled()){
                 toggle.setDrawerIndicatorEnabled(true);
             }
         }else if(2 == isFavorit){
-            System.out.println("------------BAck to PLAYLIST");
+            System.out.println("------------BAck to PLAYLIST "+ fm.getBackStackEntryCount());
             FilmGenre.mViewPager.setVisibility(View.VISIBLE);
-            fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
-            if(!toggle.isDrawerIndicatorEnabled()){
+            if(fm.findFragmentByTag(DETAILS_FRAGMENT)!=null) {
+                System.out.println("------------ IN REMOVE DETAILS");
+                fm.beginTransaction().remove(fm.findFragmentByTag(DETAILS_FRAGMENT)).commit();
+                fm.popBackStackImmediate();
+            }if(!toggle.isDrawerIndicatorEnabled()){
                 toggle.setDrawerIndicatorEnabled(true);
             }
         }

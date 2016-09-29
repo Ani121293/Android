@@ -25,7 +25,10 @@ import java.util.ArrayList;
  */
 public class PlaylistFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
-    public static ArrayList<Video> videoList;
+    public static ArrayList<Video> videoListComedy = new ArrayList<>();
+    public static ArrayList<Video> videoListThrill= new ArrayList<>();
+    public static ArrayList<Video> videoListMelodramy= new ArrayList<>();
+
     private RecyclerView recyclerView;
 
     public static PlaylistFragment newInstance(int sectionNumber) {
@@ -45,37 +48,41 @@ public class PlaylistFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        if (videoList == null) {
-            videoList = new ArrayList<>();
-            //starting to parse 'data.xml'
-            XmlPullParser parser = getResources().getXml(R.xml.data);
-            try {
-                while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
-                    switch (parser.getEventType()) {
-                        case XmlPullParser.START_TAG:
-                            if (parser.getAttributeCount() > 2) {
-                                videoList.add(new Video(parser.getAttributeValue(1),
-                                        parser.getAttributeValue(2), R.drawable.comedy1,
-                                        android.R.drawable.btn_star_big_off));
-                            }
-                        default:
-                            break;
-                    }
-                    parser.next();
-                }
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//
+        Initialize(videoListComedy, R.xml.comedy);
+//        Initialize(videoListThrill,R.xml.thrill);
+//        Initialize(videoListMelodramy,R.xml.melodramy);
+
         View view = inflater.inflate(R.layout.playlist_fragment, container, false);
         System.out.println("--------PlaylistFragment " + getActivity().getSupportFragmentManager().getFragments());
         recyclerView = (RecyclerView) view.findViewById(R.id.playlist_recyclerView);
-        PlaylistRecyclerAdapter adapter = new PlaylistRecyclerAdapter(this.getActivity(), videoList);
+        PlaylistRecyclerAdapter adapter = new PlaylistRecyclerAdapter(this.getActivity(), videoListComedy);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return view;
+    }
+void Initialize(ArrayList<Video> videoList,Integer xmlId){
+        //starting to parse 'data.xml'
+        XmlPullParser parser = getResources().getXml(xmlId);
+        try {
+            while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
+                switch (parser.getEventType()) {
+                    case XmlPullParser.START_TAG:
+                        if (parser.getAttributeCount() > 2) {
+                            videoList.add(new Video(parser.getAttributeValue(0),
+                                    parser.getAttributeValue(2), R.drawable.comedy1,
+                                    android.R.drawable.btn_star_big_off));
+                        }
+                    default:
+                        break;
+                }
+                parser.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
